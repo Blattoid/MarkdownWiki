@@ -24,6 +24,7 @@ def directory_scan(folder: Path):
 manifest = directory_scan(input_dir)
 
 def process_article(file: Path, manifest: list):
+    """Turns an article file into its HTML counterpart"""
     if file.is_dir():
         raise Exception("Cannot process non-file as article")
     # Generate list of all articles that should appear in the Pages menu
@@ -43,32 +44,37 @@ def process_article(file: Path, manifest: list):
     links = "\n"
     for url, name in sorted(pages.items()):
         links += "<item><a href=\"/{}\">{}</a></item>\n".format(url, name)
-    # Insert table of contents and article text into the template article
+    # Read in the article contents
     contents = file.read_text(encoding="UTF-8")
     with open("article-template.html", "r") as template:
+        # Insert page links and article text into the template article
         output = template.read().format(links, contents)
     return output  # Return the generated HTML document
 
-def process_manifest(items: list, manifest: list):
-    for item in items:
-        print((" * " if str(item).endswith(".md") else "") + str(item))
+def process_manifest(manifest: list):
+    """Iterates over every file, converting if needed or plain copies to destination otherwise"""
+    def recurse(items: list, manifest: list):
+        for item in items:
+            print((" * " if str(item).endswith(".md") else "") + str(item))
 
-        if type(item) is list:
-            process_manifest(item, manifest)  # Recursively process folders
+            if type(item) is list:
+                process_manifest(item, manifest)  # Recursively process folders
 
-        # Determine where the file in question will be placed
-        destination = output_dir / str(item).replace(".md", ".html")  # Make output files appear in the configured folder
-        destination.parents[0].mkdir(parents=True, exist_ok=True)  # Make parent folder of path if it doesn't exist
+            # Determine where the file in question will be placed
+            destination = output_dir / str(item).replace(".md", ".html")  # Make output files appear in the configured folder
+            destination.parents[0].mkdir(parents=True, exist_ok=True)  # Make parent folder of path if it doesn't exist
 
-        if str(item).endswith(".md"):  # Markdown document, process it
-            # Convert markdown file into an HTML document and determine its location
-            article = process_article(item, manifest)
+            if str(item).endswith(".md"):  # Markdown document, process it
+                # Convert markdown file into an HTML document and determine its location
+                article = process_article(item, manifest)
 
-            # Write contents
-            with open(destination, "w") as file:
-                file.write(article)
+                # Write contents
+                with open(destination, "w") as file:
+                    file.write(article)
 
-        else:  # Other asset file, copy without processing
-            destination.write_bytes(item.read_bytes())
+            else:  # Other asset file, copy without processing
+                destination.write_bytes(item.read_bytes())
+    recurse(manifest, manifest)
 
-process_manifest(manifest, manifest)
+# Turns all .md files into .html files and saves them, while copying anything else.
+process_manifest(manifest)
