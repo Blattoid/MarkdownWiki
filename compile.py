@@ -34,11 +34,13 @@ def process_article(file: Path, manifest: list):
             continue  # Do not include the present page in the list
         if ".md" not in str(item):
             continue  # Skip non-markdown files
-        # Change file extension of articles in toc hyperlinks and remove input dir name
-        item = str(item).replace(".md", ".html")[len(str(input_dir)) + 1:]
-        # Add page to dictionary where key:value is url:name
-        name = item.title().replace("/", " > ")  # Convert url into friendlier format
-        # Remove file extension from article name and assign to dict
+        # Change file extension of articles in toc hyperlinks
+        item = str(item).replace(".md", ".html")
+        # Remove input directory name from page names
+        name = item[len(str(input_dir)) + 1:]
+        # Convert slashes in file path into greater-than signs as an arrow
+        name = name.title().replace("/", " > ")
+        # Remove file extension from article name and assign to dict, where key:value is url:name
         pages[item] = name[:name.rfind(".")]
     # Assemble HTML to be placed in the Pages menu
     links = "\n"
