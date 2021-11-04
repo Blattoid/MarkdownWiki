@@ -11,7 +11,7 @@ After a bit of research I discovered a neat project called Strapdown.js, which i
 
 ### Automating the tedium
 
-So armed with both of these tools, I set to work with figuring out how to effectively put them to use. I very quickly realised that I would have to be copy/pasting the article test into each HTML file per page, and if I ever decided to add a page then I would have to update the page selection menu for every other page to include the new one. I decided that this was too much hassle for when I needed to focus on writing.
+So armed with both of these tools, I set to work with figuring out how to effectively put them to use. I very quickly realised that I would have to be copy/pasting the article text into each HTML file per page, and if I ever decided to add a page then I would have to update the page selection menu for every other page to reference the new one. I decided that this was too much hassle for when I needed to focus on writing.
 
 Why do something repetitive and tedious when you can instead write a script to automate the task? So that is exactly what I did! There's a Python script with the express purpose of copying everything in a source folder into an almost identical folder, except along the way it formats the raw Markdown files into a minimalistic HTML file. It also has to generate the page's unique dropdown menu to include all the other pages in the Wiki.
 
