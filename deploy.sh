@@ -1,3 +1,10 @@
 #!/bin/bash
+
+# Build the website html files
 ./compile.py
-sudo bash -c "rm -rfv /var/www/html/Wiki && cp -rv html/Wiki /var/www/html"
+
+# Remove old website directory
+sudo rm -rfv /var/www/html/Wiki
+
+# Copy fresh build into webserver root
+cp -rv html/Wiki /var/www/html"
