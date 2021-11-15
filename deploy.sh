@@ -7,4 +7,4 @@
 sudo rm -rfv /var/www/html/Wiki
 
 # Copy fresh build into webserver root
-cp -rv html/Wiki /var/www/html
+sudo cp -rv html/Wiki /var/www/html
